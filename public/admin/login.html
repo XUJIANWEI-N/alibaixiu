@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="utf-8">
   <title>Sign in &laquo; Admin</title>
   <link rel="stylesheet" href="../assets/vendors/bootstrap/css/bootstrap.css">
   <link rel="stylesheet" href="../assets/css/admin.css">
 </head>
+
 <body>
   <div class="login">
     <div class="login-wrap">
@@ -22,8 +24,52 @@
         <label for="password" class="sr-only">密码</label>
         <input id="password" type="password" class="form-control" placeholder="密码">
       </div>
-      <button class="btn btn-primary btn-block">登 录</button>
+      <!-- (1.1) id -->
+      <button class="btn btn-primary btn-block" id="loginBth">登 录</button>
     </div>
   </div>
 </body>
+
+<!-- (1.2) script -->
+<script src="../assets/vendors/jquery/jquery.min.js"></script>
+<script>
+  // (1.3) 选择登陆按钮并为其添加点击事件
+  $('#loginBth').on('click', function () {
+    // (1.4) 获取用户输入的邮箱地址
+    var email = $('#email').val();
+    // (1.4) 获取用户输入的密码
+    var password = $('#password').val();
+    // (1.5) 判断用户是否输入了邮箱地址
+    if (email.trim().length == 0) {
+      alert('请输入邮箱');
+      return;
+    }
+    // (1.5) 判断用户是否输入了密码
+    if (password.trim().length == 0) {
+      alert('请输入密码');
+      return;
+    }
+
+    // (1.6) 向服务器端发送请求 当数据获取了后，需要查看接口文档，找到登录的情况，把对应的参数传递进去
+    $.ajax({
+      type: 'post',
+      url: '/login',
+      data: {
+        email: email,
+        password: password
+      },
+      // (1.7) 请求成功后会调用
+      success: function (response) {
+        // (1.7) 登陆成功，跳转到数据管理的首页面
+        location.href = 'index.html';
+      },
+      // (1.7) 请求失败后会调用
+      error: function () {
+        // (1.7) 登陆失败
+        alert('用户名或密码错误');
+      }
+    })
+  });
+</script>
+
 </html>

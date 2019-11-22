@@ -1,5 +1,16 @@
+<!-- (2.1) 实现登陆拦截功能 script -->
+<script src="/login/status"></script>
+<script>
+  // (2.1) 判断服务器返回的 值是否为true，如果不是true，代表没有进行登录，那么需要跳转到登录页面
+  if (!isLogin) {
+    location.href = 'login.html';
+  }
+</script>
+
+
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="utf-8">
   <title>Dashboard &laquo; Admin</title>
@@ -9,6 +20,7 @@
   <link rel="stylesheet" href="../assets/css/admin.css">
   <script src="../assets/vendors/nprogress/nprogress.js"></script>
 </head>
+
 <body>
   <script>NProgress.start()</script>
 
@@ -17,7 +29,8 @@
       <button class="btn btn-default navbar-btn fa fa-bars"></button>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="profile.html"><i class="fa fa-user"></i>个人中心</a></li>
-        <li><a href="login.html"><i class="fa fa-sign-out"></i>退出</a></li>
+        <!-- (3.1) href id -->
+        <li><a href="javascript:;" id="logout"><i class="fa fa-sign-out"></i>退出</a></li>
       </ul>
     </nav>
     <div class="container-fluid">
@@ -86,4 +99,8 @@
   <script src="../assets/vendors/bootstrap/js/bootstrap.js"></script>
   <script>NProgress.done()</script>
 </body>
+
+<!-- (3.2) 退出登录 -->
+<script src="../assets/js/common.js"></script>
+
 </html>
