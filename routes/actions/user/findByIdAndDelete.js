@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
 			// 验证
 			let { error } = Joi.validate(item, schema);
 			// 数据格式没有通过验证
-			if (error) return res.status(400).send({message: error.message});
+			if (error) return res.status(400).send({ message: error.message });
 		}
 		// 通过验证
 		for (const item of ids) {
@@ -38,8 +38,8 @@ module.exports = async (req, res) => {
 			result.push(user);
 			// 如果缩略图存在
 			if (user.avatar) {
-				// 删除缩略图
-				await unlink(path.join(__dirname, '../', '../', 'public', 'uploads', user.avatar));
+				// 删除缩略图 (14.6)
+				await unlink(path.join(__dirname, '../../../', 'public', user.avatar));
 			}
 		}
 		// 响应
@@ -50,7 +50,7 @@ module.exports = async (req, res) => {
 		// 验证
 		const { error } = Joi.validate(id, schema);
 		// 数据格式没有通过验证
-		if (error) return res.status(400).send({message: error.message});
+		if (error) return res.status(400).send({ message: error.message });
 		// 通过验证
 		// 删除用户
 		let user = await User.findByIdAndDelete(id);
@@ -62,5 +62,5 @@ module.exports = async (req, res) => {
 		// 响应
 		res.send(user);
 	}
-	
+
 };

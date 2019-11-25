@@ -1,5 +1,16 @@
+<!-- (2.1) 实现登陆拦截功能 script -->
+<script src="/login/status"></script>
+<script>
+  // (2.1) 判断服务器返回的 值是否为true，如果不是true，代表没有进行登录，那么需要跳转到登录页面
+  if (!isLogin) {
+    location.href = 'login.html';
+  }
+</script>
+
+
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="utf-8">
   <title>Categories &laquo; Admin</title>
@@ -9,6 +20,7 @@
   <link rel="stylesheet" href="../assets/css/admin.css">
   <script src="../assets/vendors/nprogress/nprogress.js"></script>
 </head>
+
 <body>
   <script>NProgress.start()</script>
 
@@ -17,7 +29,8 @@
       <button class="btn btn-default navbar-btn fa fa-bars"></button>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="profile.html"><i class="fa fa-user"></i>个人中心</a></li>
-        <li><a href="login.html"><i class="fa fa-sign-out"></i>退出</a></li>
+        <!-- (3.1) href id -->
+        <li><a href="javascript:;" id="logout"><i class="fa fa-sign-out"></i>退出</a></li>
       </ul>
     </nav>
     <div class="container-fluid">
@@ -29,16 +42,20 @@
         <strong>错误！</strong>发生XXX错误
       </div> -->
       <div class="row">
-        <div class="col-md-4">
-          <form>
+        <!-- (19.5) id -->
+        <div class="col-md-4" id="formBox">
+          <!-- (16.1) id -->
+          <form id="addCategory">
             <h2>添加分类</h2>
             <div class="form-group">
               <label>名称</label>
-              <input class="form-control" type="text" placeholder="请输入分类名称">
+              <!-- (16.1) name -->
+              <input class="form-control" type="text" placeholder="请输入分类名称" name="title">
             </div>
             <div class="form-group">
               <label>图标</label>
-              <input class="form-control" type="text" placeholder="请输入分类图标类名">
+              <!-- (16.1) name -->
+              <input class="form-control" type="text" placeholder="请输入分类图标类名" name="className">
             </div>
             <div class="form-group">
               <button class="btn btn-primary" type="submit">添加</button>
@@ -57,31 +74,9 @@
                 <th class="text-center" width="100">操作</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td class="text-center"><input type="checkbox"></td>
-                <td>奇趣事</td>
-                <td class="text-center">
-                  <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>
-                  <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-                </td>
-              </tr>
-              <tr>
-                <td class="text-center"><input type="checkbox"></td>
-                <td>潮科技</td>
-                <td class="text-center">
-                  <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>
-                  <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-                </td>
-              </tr>
-              <tr>
-                <td class="text-center"><input type="checkbox"></td>
-                <td>奇趣事</td>
-                <td class="text-center">
-                  <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>
-                  <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-                </td>
-              </tr>
+            <!-- (17.7) id -->
+            <tbody id="categoryBox">
+              <!-- (17.3) 模板 -->
             </tbody>
           </table>
         </div>
@@ -129,4 +124,54 @@
   <script src="../assets/vendors/bootstrap/js/bootstrap.js"></script>
   <script>NProgress.done()</script>
 </body>
+
+<!-- (17.2) 引入模板引擎库文件 script -->
+<script src="../assets/vendors/art-template/template-web.js"></script>
+
+<!-- (17.3) 分类列表模板 -->
+<script type="text/html" id="categoryListpl">
+<!-- // (17.4) each -->
+{{each data}}
+<tr>
+  <td class="text-center"><input type="checkbox"></td>
+  <!-- // (17.5) {{}} -->
+  <td>{{$value.title}}</td>
+  <td class="text-center">
+    <!-- // (18.1) edit  // (18.2) data-id -->
+    <a href="javascript:;" class="btn btn-info btn-xs edit" data-id="{{$value._id}}">编辑</a>
+    <!-- // (21.1) delete data-id -->
+    <a href="javascript:;" class="btn btn-danger btn-xs delete" data-id="{{$value._id}}">删除</a>
+  </td>
+</tr>
+{{/each}}
+</script>
+
+<!-- (19.1) 分类数据修改模板 -->
+<script type="text/html" id="modifyCategoryTpl">
+  <!-- // (19.2) id  // (20.3) data-id -->
+<form id="modifyCategory" data-id="{{_id}}">
+  <h2>修改分类</h2>
+  <div class="form-group">
+    <label>名称</label>
+    <!-- //(19.2) (16.1) name  // (19.4) value -->
+    <input class="form-control" type="text" placeholder="请输入分类名称" name="title" value="{{title}}">
+  </div>
+  <div class="form-group">
+    <label>图标</label>
+    <!-- //(19.2) (16.1) name  // (19.4) value -->
+    <input class="form-control" type="text" placeholder="请输入分类图标类名" name="className" value="{{className}}">
+  </div>
+  <div class="form-group">
+    <button class="btn btn-primary" type="submit">修改</button>
+  </div>
+</form>
+</script>
+
+
+<!-- (16.2) script -->
+<script src="../assets/js/category.js"></script>
+
+<!-- (3.2) 退出登录 -->
+<script src="../assets/js/common.js"></script>
+
 </html>
