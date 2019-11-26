@@ -12,7 +12,7 @@ $.ajax({
 
 
 // (23.1) 当管理员选择文件的时候，触发事件
-$('#feature').on('change', function () {
+$('#parentBox').on('change', '#feature', function () {  // $('#feature').on('change', function () { 
     // (23.2) 获取到管理员选择到的文件，只能选择一个文件
     var file = this.files[0];
     // (23.3) 创建formData对象，实现二进制文件上传
@@ -52,5 +52,64 @@ $('#addForm').on('submit', function () {
     })
 
     // (24.2) 阻止表单默认提交的行为
+    return false;
+});
+
+
+// (29.4) 获取游览器地址栏中的id参数
+var id = getUrlParams('id');
+// (29.5) 当前管理员是在做修改文章操作
+if (id != null) {
+    //(29.6) 根据id获取文章的详细信息
+    $.ajax({
+        type: 'get',
+        url: '/posts/' + id,
+        success: function (response) {
+            // (29.11) 向服务器端发送请求，获取文章分类数据
+            $.ajax({
+                type: 'get',
+                url: '/categories',
+                success: function (categories) {
+                    response.categories = categories;
+                    // (29.9) 使用模板引擎将数据和HTML字符串进行拼接
+                    var html = template('modifyTpl', response);
+                    // (29.16) 将拼接好的字符串显示在页面中
+                    $('#parentBox').html(html);
+                }
+            });
+        }
+    })
+}
+
+// (29.2) 从浏览器的地址栏中获取查询参数
+function getUrlParams(name) {
+    var paramsAry = location.search.substr(1).split('&');
+    // (29.3) 循环数组
+    for (var i = 0; i < paramsAry.length; i++) {
+        var tmp = paramsAry[i].split('=');
+        if (tmp[0] == name) {
+            return tmp[1];
+        }
+    }
+    return null;
+}
+
+
+// (30.1) 当修改文章信息表单发生提交行为的时候
+$('#parentBox').on('submit', '#modifyForm', function () {
+    // (30.2) 获取管理员在表单中输入的内容
+    var formData = $(this).serialize();
+    // (30.4) 获取管理员正在修改的文章id值
+    var id = $(this).attr('data-id');
+    $.ajax({
+        type: 'put',
+        url: '/posts/' + id,
+        data: formData,
+        success: function () {
+            location.href = '/admin/posts.html';
+        }
+    })
+
+    // (30.1) 阻止表单默认提交行为
     return false;
 });

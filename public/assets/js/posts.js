@@ -15,12 +15,13 @@ $.ajax({
     }
 });
 
+/* // 移动到commont.js里了
 // (25.9) 处理日期时间格式
 function formateDate(date) {
     // 将日期时间字符串转换成日期对象
     date = new Date(date);
     return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-}
+} */
 
 
 // (26.6) 分页
@@ -86,4 +87,22 @@ $('#filterForm').on('submit', function () {
 
     // (28.3) 阻止表单默认提交行为
     return false;
+});
+
+
+// (31.2) 当删除按钮被点击的时候
+$('#postsBox').on('click', '.delete', function () {
+    // (31.3) 弹出删除确认框和管理员确认是否真的要进行删除操作
+    if (confirm('您真的要进行删除操作吗')) {
+        // (31.5) 获取到管理员要删除的文章的id
+        var id = $(this).attr('data-id');
+        // (31.6) 向服务器端发送请求，执行删除操作
+        $.ajax({
+            type: 'delete',
+            url: '/posts/' + id,
+            success: function () {
+                location.reload();
+            }
+        })
+    }
 });
